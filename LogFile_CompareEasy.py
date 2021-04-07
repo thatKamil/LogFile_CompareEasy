@@ -11,7 +11,7 @@ parameters_dict1 = {}
 parameters_dict2 = {}
 differences_list = []
 
-parameters_list = ['Filename Prefix', 'Filter', 'Frame Averaging', 'Camera binning', 'Source Voltage (kV)',
+parameters_list = ['Filter', 'Frame Averaging', 'Camera binning', 'Source Voltage (kV)',
                    'Source Current (uA)', 'Exposure (ms)', 'Rotation Step (deg)', 'Scanning position'
                                                                                   'Image Pixel Size (um)',
                    'Use 360 Rotation', 'Random Movement',
@@ -143,7 +143,7 @@ def summaryDifference(differencesCounter):
     if differencesCounter == 0:
         textArea.insert(END, 'There are no differences\nbetween the log files')
     if differencesCounter == 1:
-        textArea.insert(END, 'There is 1 difference\nbetween the log files')
+        textArea.insert(END, 'There is 1 difference\nbetween the log files\n')
     if differencesCounter > 1:
         textArea.insert(END, 'There are ' + str(differencesCounter) + ' differences\nbetween the log files\n')
     textArea.insert(END, '========================')
