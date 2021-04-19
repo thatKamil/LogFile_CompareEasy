@@ -1,0 +1,16 @@
+LogFile_CompareEasy
+
+Version 1.0
+
+13th April 2021
+
+LogFile_ReadEasy parses useful information from SkyScan 1272 uCT log files.
+
+Copyright (c) 2021 Kamil Sokolowski
+
+Any suggestions or features you'd like added?
+Email me : thatKamil@pm.me
+
+Source code & license (MIT) available at: https://github.com/thatKamil/LogFile_CompareEasy
+
+Ascii Art by hjw
