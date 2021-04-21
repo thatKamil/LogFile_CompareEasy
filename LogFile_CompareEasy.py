@@ -223,9 +223,4 @@ Label(mainWindow, text="Different Parameters", bg='gray98').place(x=100, y=98)
 Label(mainWindow, text="Identical Parameters", bg='gray98').place(x=550, y=98)
 Label(mainWindow, text="Ready to compare \neasy?", bg='gray98', font='Helvetica 15').place(x=500, y=2)
 
-# asciiArt = open("asciiArt", 'r')
-# asciiArtOutput = asciiArt.read()
-# textArea.insert(END, "\n\n\n\n")
-# textArea.insert(END, asciiArtOutput)
-
 mainWindow.mainloop()
