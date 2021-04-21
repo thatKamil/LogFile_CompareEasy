@@ -3,6 +3,7 @@
 ######################################################################################################################
 import os
 from tkinter import *
+from tkinter import messagebox
 from tkinter import filedialog
 from tkinter.scrolledtext import ScrolledText
 
@@ -22,6 +23,22 @@ def resource_path(relative_path):
     """ Get absolute path to resource """
     base_path = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
     return os.path.join(base_path, relative_path)
+
+# Prepares information for the 'About' button.
+aboutText = []
+aboutPath = resource_path("about")
+aboutFile = open(aboutPath, "r", encoding="utf-8")
+for line in aboutFile.readlines():
+    aboutText.append(line)
+informationAbout = ''.join(aboutText)
+
+# Prepares information for the 'Use Guide' button.
+useText = []
+usePath = resource_path("useGuide")
+useFile = open(usePath, "r", encoding="utf-8")
+for line in useFile.readlines():
+    useText.append(line)
+informationUseGuide = ''.join(useText)
 
 ######################################################################################################################
 ### Functions
@@ -158,18 +175,10 @@ def summaryDifference(differencesCounter):
     textArea.insert(END, '========================')
 
 def aboutInformation():
-    textArea.delete("1.0", END)
-    with open('about') as aboutText:
-        aboutLines = aboutText.readlines()
-        for i in aboutLines:
-            textArea.insert(END, i)
+    messagebox.showinfo('about', message=informationAbout)
 
 def useInformation():
-    textArea.delete("1.0", END)
-    with open('useGuide') as useText:
-        useLines = useText.readlines()
-        for i in useLines:
-            textArea.insert(END, i)
+    messagebox.showinfo('useGuide', message=informationUseGuide)
 
 
 ######################################################################################################################
@@ -189,6 +198,10 @@ mainWindow.tk.call('wm', 'iconphoto', mainWindow._w, PhotoImage(file=iconPath))
 # Text box
 textArea = ScrolledText(mainWindow, width=97, height=29, bg='old lace', yscrollcommand='textScroll.set')
 textArea.place(x=10, y=120)
+asciiPath = resource_path("asciiArt")
+asciiArt = open(asciiPath, 'r')
+asciiArtOutput = asciiArt.read()
+textArea.insert(END, asciiArtOutput)
 
 # Log file path output text areas
 logPath1 = Text(mainWindow, width=50, height=1, bg='old lace')
@@ -210,9 +223,9 @@ Label(mainWindow, text="Different Parameters", bg='gray98').place(x=100, y=98)
 Label(mainWindow, text="Identical Parameters", bg='gray98').place(x=550, y=98)
 Label(mainWindow, text="Ready to compare \neasy?", bg='gray98', font='Helvetica 15').place(x=500, y=2)
 
-asciiBook = open("asciiArt", 'r')
-asciiBookOutput = asciiBook.read()
-textArea.insert(END, "\n\n\n\n")
-textArea.insert(END, asciiBookOutput)
+# asciiArt = open("asciiArt", 'r')
+# asciiArtOutput = asciiArt.read()
+# textArea.insert(END, "\n\n\n\n")
+# textArea.insert(END, asciiArtOutput)
 
 mainWindow.mainloop()
