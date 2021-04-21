@@ -1,6 +1,7 @@
 ######################################################################################################################
 ### Initialisation
 ######################################################################################################################
+import os
 from tkinter import *
 from tkinter import messagebox
 from tkinter import filedialog
@@ -18,6 +19,26 @@ parameters_list = ['Filter', 'Frame Averaging', 'Camera binning', 'Source Voltag
                    'Scan duration', 'Minimum for CS to Image Conversion', 'Maximum for CS to Image Conversion',
                    'Smoothing', 'Ring Artifact Correction']
 
+def resource_path(relative_path):
+    """ Get absolute path to resource """
+    base_path = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
+    return os.path.join(base_path, relative_path)
+
+# Prepares information for the 'About' button.
+aboutText = []
+aboutPath = resource_path("about")
+aboutFile = open(aboutPath, "r", encoding="utf-8")
+for line in aboutFile.readlines():
+    aboutText.append(line)
+informationAbout = ''.join(aboutText)
+
+# Prepares information for the 'Use Guide' button.
+useText = []
+usePath = resource_path("useGuide")
+useFile = open(usePath, "r", encoding="utf-8")
+for line in useFile.readlines():
+    useText.append(line)
+informationUseGuide = ''.join(useText)
 
 ######################################################################################################################
 ### Functions
@@ -29,7 +50,7 @@ def openLogFileandProcess1():
 
     tf1 = filedialog.askopenfilename(
         initialdir="C:/Users/MainFrame/Desktop/",
-        title="Open Log file",
+        title="Choose log file 1",
         filetypes=(("Log Files", "*.log"),)
     )
 
@@ -48,7 +69,7 @@ def openLogFileandProcess2():
 
     tf2 = filedialog.askopenfilename(
         initialdir="C:/Users/MainFrame/Desktop/",
-        title="Open Log file",
+        title="Choose logg file 2",
         filetypes=(("Log Files", "*.log"),)
     )
 
@@ -62,8 +83,11 @@ def openLogFileandProcess2():
 
 
 def compareLogFiles():
+    """Compares the basic parameters of the log files"""
+
+    textArea.delete("1.0", END)
+    # Determines the number of different parameters
     differencesCounter = 0
-    textArea.insert(INSERT, "=" * 97)
     for k1, v1 in parameters_dict1.items():
         for k2, v2 in parameters_dict2.items():
             if k1 == k2:
@@ -92,8 +116,11 @@ def compareLogFiles():
 
 
 def compareEssentialLogFiles():
+    """Compares all parameters in the log file for differences"""
+
+    textArea.delete("1.0", END)
+    # Determines number of differences between parameters
     differencesCounter = 0
-    textArea.insert(INSERT, "=" * 97)
     for k1, v1 in parameters_dict1.items():
         for k2, v2 in parameters_dict2.items():
             if k1 in parameters_list:
@@ -102,7 +129,9 @@ def compareEssentialLogFiles():
                         differences_list.append(k1)
                         differencesCounter += 1
 
+    # Outputs difference result as a sentence
     summaryDifference(differencesCounter)
+    # Lists the parameter which were different
     for object in differences_list:
         textArea.insert(END, '\n' + object)
 
@@ -125,6 +154,7 @@ def compareEssentialLogFiles():
 
 
 def clearAllFields():
+    """Clears all text fields on screen"""
     textArea.delete("1.0", END)
     logPath1.delete("1.0", END)
     logPath2.delete("1.0", END)
@@ -133,12 +163,8 @@ def clearAllFields():
     differences_list.clear()
 
 
-def about():
-    messagebox.showinfo('LogFile_CompareEasy', 'Developed by Kamil Sokolowski \nkamil.sokolowski@tri.edu.au \n\n'
-                                               'Version 1.1 34th Feb 2021')
-
-
 def summaryDifference(differencesCounter):
+    """Summarises the number of differences in a sentence structure"""
     textArea.insert(END, "\n======== Summary =======\n")
     if differencesCounter == 0:
         textArea.insert(END, 'There are no differences\nbetween the log files')
@@ -148,6 +174,12 @@ def summaryDifference(differencesCounter):
         textArea.insert(END, 'There are ' + str(differencesCounter) + ' differences\nbetween the log files\n')
     textArea.insert(END, '========================')
 
+def aboutInformation():
+    messagebox.showinfo('about', message=informationAbout)
+
+def useInformation():
+    messagebox.showinfo('useGuide', message=informationUseGuide)
+
 
 ######################################################################################################################
 ### GUI Interface Setup
@@ -156,42 +188,39 @@ def summaryDifference(differencesCounter):
 # Main windows setup
 mainWindow = Tk()  # Links main window to the interpreter
 mainWindow.title("LogFile_CompareEasy by Kamil_Sokolowski")
-mainWindow.geometry("810x935+500+10")  # Window size and initial position
-mainWindow['bg'] = 'khaki1'  # Background colour
+mainWindow.geometry("810x600+200+15")  # Window size and initial position
+mainWindow['bg'] = 'gray98'  # Background colour
+
+# Icon top left window
+iconPath = resource_path("icon.png")
+mainWindow.tk.call('wm', 'iconphoto', mainWindow._w, PhotoImage(file=iconPath))
 
 # Text box
-textArea = ScrolledText(mainWindow, width=97, height=50, bg='old lace', yscrollcommand='textScroll.set')
+textArea = ScrolledText(mainWindow, width=97, height=29, bg='old lace', yscrollcommand='textScroll.set')
 textArea.place(x=10, y=120)
+asciiPath = resource_path("asciiArt")
+asciiArt = open(asciiPath, 'r')
+asciiArtOutput = asciiArt.read()
+textArea.insert(END, asciiArtOutput)
 
 # Log file path output text areas
-logPath1 = Text(mainWindow, width=34, height=1, bg='old lace')
-logPath1.place(x=95, y=34)
-logPath2 = Text(mainWindow, width=34, height=1, bg='old lace')
-logPath2.place(x=95, y=62)
+logPath1 = Text(mainWindow, width=50, height=1, bg='old lace')
+logPath1.place(x=95, y=5)
+logPath2 = Text(mainWindow, width=50, height=1, bg='old lace')
+logPath2.place(x=95, y=33)
 
 # Main buttons
-Button(mainWindow, text="Open Log 1", command=openLogFileandProcess1, height=1, width=10).place(x=9, y=30)
-Button(mainWindow, text="Open Log 2", command=openLogFileandProcess2, height=1, width=10).place(x=9, y=60)
-Button(mainWindow, text="Compare All", command=compareLogFiles, height=1, width=51).place(x=9, y=2)
-Button(mainWindow, text="Compare Essentials", command=compareEssentialLogFiles, height=1, width=51).place(x=425, y=2)
-Button(mainWindow, text="Clear All", command=clearAllFields, height=3, width=8).place(x=725, y=30)
+Button(mainWindow, text="Log file 1", command=openLogFileandProcess1, height=1, width=10).place(x=9, y=2)
+Button(mainWindow, text="Log file 2", command=openLogFileandProcess2, height=1, width=10).place(x=9, y=30)
+Button(mainWindow, text="Compare All", command=compareLogFiles, height=1, width=55).place(x=408, y=60)
+Button(mainWindow, text="Compare Essentials", command=compareEssentialLogFiles, height=1, width=55).place(x=9, y=60)
+Button(mainWindow, text="Clear All", command=clearAllFields, height=3, width=8).place(x=737, y=2)
+Button(mainWindow, text="Guide", command=useInformation, height=1, width=7).place(x=675, y=4)
+Button(mainWindow, text="About", command=aboutInformation, height=1, width=7).place(x=675, y=32)
 
 # Labels
-Label(mainWindow, text="Different Parameters", bg='khaki1').place(x=100, y=98)
-Label(mainWindow, text="Identical Parameters", bg='khaki1').place(x=550, y=98)
-Label(mainWindow, text="LogFile_CompareEasy", bg='khaki1', font='Helvetica 20').place(x=420, y=50)
-
-textArea.insert(END, "\n\n\n\n\t Are you ready to compare easy?")
-
-menubar = Menu(mainWindow, background='#ff0000', foreground='black', activebackground='white', activeforeground='black')
-file = Menu(menubar, tearoff=0, background='white', foreground='black')
-file.add_command(label="Save output")
-file.add_command(label="Exit", command=mainWindow.quit)
-menubar.add_cascade(label="More", menu=file)
-
-help = Menu(menubar, tearoff=0)
-help.add_command(label="Developer", command=about)
-menubar.add_cascade(label="Info", menu=help)
-mainWindow.config(menu=menubar)
+Label(mainWindow, text="Different Parameters", bg='gray98').place(x=100, y=98)
+Label(mainWindow, text="Identical Parameters", bg='gray98').place(x=550, y=98)
+Label(mainWindow, text="Ready to compare \neasy?", bg='gray98', font='Helvetica 15').place(x=500, y=2)
 
 mainWindow.mainloop()
