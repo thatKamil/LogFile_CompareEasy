@@ -12,11 +12,11 @@ parameters_dict1 = {}
 parameters_dict2 = {}
 differences_list = []
 
+# Parses the 'Essential Parameters'.
 parameters_list = ['Filter', 'Frame Averaging', 'Camera binning', 'Source Voltage (kV)',
                    'Source Current (uA)', 'Exposure (ms)', 'Rotation Step (deg)', 'Scanning position'
-                                                                                  'Image Pixel Size (um)',
-                   'Use 360 Rotation', 'Random Movement',
-                   'Scan duration', 'Minimum for CS to Image Conversion', 'Maximum for CS to Image Conversion',
+                   'Image Pixel Size (um)', 'Use 360 Rotation', 'Random Movement', 'Scan duration', 
+                   'Minimum for CS to Image Conversion', 'Maximum for CS to Image Conversion',
                    'Smoothing', 'Ring Artifact Correction']
 
 def resource_path(relative_path):
@@ -45,14 +45,15 @@ informationUseGuide = ''.join(useText)
 ######################################################################################################################
 
 def openLogFileandProcess1():
+  """ Processes the first log file """
     textArea.delete("1.0", "end")
     logPath1.delete("1.0", "end")
 
+    # User directs to path of first log file.
     tf1 = filedialog.askopenfilename(
         initialdir="C:/Users/MainFrame/Desktop/",
         title="Choose log file 1",
-        filetypes=(("Log Files", "*.log"),)
-    )
+        filetypes=(("Log Files", "*.log"),))
 
     logPath1.insert(END, tf1)  # Writes path address to text box in GUI
 
@@ -64,14 +65,15 @@ def openLogFileandProcess1():
 
 
 def openLogFileandProcess2():
+    """ Processes the second log file """
     textArea.delete("1.0", "end")
     logPath2.delete("1.0", "end")
 
+    # User directs to path of second log file.
     tf2 = filedialog.askopenfilename(
         initialdir="C:/Users/MainFrame/Desktop/",
         title="Choose logg file 2",
-        filetypes=(("Log Files", "*.log"),)
-    )
+        filetypes=(("Log Files", "*.log"),))
 
     logPath2.insert(END, tf2)  # Writes path address to text box in GUI
 
@@ -83,9 +85,9 @@ def openLogFileandProcess2():
 
 
 def compareLogFiles():
-    """Compares the basic parameters of the log files"""
-
+   """Compares the 'Essential' parameters of the log files"""
     textArea.delete("1.0", END)
+    
     # Determines the number of different parameters
     differencesCounter = 0
     for k1, v1 in parameters_dict1.items():
@@ -95,18 +97,21 @@ def compareLogFiles():
                     differences_list.append(k1)
                     differencesCounter += 1
 
+    # Prints a summary in the text box.
+    # The number of differences and lists parameters.               
     summaryDifference(differencesCounter)
     for object in differences_list:
         textArea.insert(END, '\n' + object)
-
+  
+    # Detailed output of similarities and differences.
     textArea.insert(INSERT, "\n\n" + "=" * 97)
     for k1, v1 in parameters_dict1.items():
         for k2, v2 in parameters_dict2.items():
             if k1 == k2:
                 if v1 != v2:
-                    k1_count = 48 - len(k1.strip())
-                    v1_count = 41 - len(v1.strip())
-                    v2_count = 41 - len(v2.strip())
+                    k1_count = 48 - len(k1.strip())  # Text formatting
+                    v1_count = 41 - len(v1.strip())  # Text formatting
+                    v2_count = 41 - len(v2.strip())  # Text formatting
                     textArea.insert(END, "\n" + k1 + " " * k1_count + "|\nLog 1: " + v1 + " " * v1_count + "|\nLog 2: "
                                     + v2 + " " * v2_count + "|\n" + '-' * 97)
 
@@ -117,8 +122,8 @@ def compareLogFiles():
 
 def compareEssentialLogFiles():
     """Compares all parameters in the log file for differences"""
-
     textArea.delete("1.0", END)
+    
     # Determines number of differences between parameters
     differencesCounter = 0
     for k1, v1 in parameters_dict1.items():
@@ -129,12 +134,13 @@ def compareEssentialLogFiles():
                         differences_list.append(k1)
                         differencesCounter += 1
 
-    # Outputs difference result as a sentence
+    # Prints a summary in the text box.
+    # The number of differences and lists parameters.
     summaryDifference(differencesCounter)
-    # Lists the parameter which were different
     for object in differences_list:
         textArea.insert(END, '\n' + object)
 
+    # Detailed output of similarities and differences.
     textArea.insert(INSERT, '\n\n' + "=" * 97)
     for k1, v1 in parameters_dict1.items():
         for k2, v2 in parameters_dict2.items():
@@ -164,7 +170,7 @@ def clearAllFields():
 
 
 def summaryDifference(differencesCounter):
-    """Summarises the number of differences in a sentence structure"""
+    """Summarises the number of differences as a sentance """
     textArea.insert(END, "\n======== Summary =======\n")
     if differencesCounter == 0:
         textArea.insert(END, 'There are no differences\nbetween the log files')
@@ -175,9 +181,11 @@ def summaryDifference(differencesCounter):
     textArea.insert(END, '========================')
 
 def aboutInformation():
+  """ Displays message box with program information """
     messagebox.showinfo('about', message=informationAbout)
 
 def useInformation():
+  """ Displays message box with program use information """
     messagebox.showinfo('useGuide', message=informationUseGuide)
 
 
