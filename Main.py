@@ -45,21 +45,21 @@ informationUseGuide = ''.join(useText)
 ######################################################################################################################
 
 def openLogFileandProcess1():
-  """ Processes the first log file """
+    """ Processes the first log file """
     textArea.delete("1.0", "end")
     logPath1.delete("1.0", "end")
 
     # User directs to path of first log file.
-    tf1 = filedialog.askopenfilename(
+    logFile1 = filedialog.askopenfilename(
         initialdir="C:/Users/MainFrame/Desktop/",
         title="Choose log file 1",
         filetypes=(("Log Files", "*.log"),))
 
-    logPath1.insert(END, tf1)  # Writes path address to text box in GUI
+    logPath1.insert(END, logFile1)  # Writes path address to text box in GUI
 
     # Opens and parses the data from log file
-    with open(tf1, 'r') as fin:
-        for line in fin:
+    with open(logFile1, 'r') as fileInput:
+        for line in fileInput:
             position = line.find('=')
             parameters_dict1[line[:position]] = (line[position + 1:]).strip()
 
@@ -70,31 +70,31 @@ def openLogFileandProcess2():
     logPath2.delete("1.0", "end")
 
     # User directs to path of second log file.
-    tf2 = filedialog.askopenfilename(
+    logFile2 = filedialog.askopenfilename(
         initialdir="C:/Users/MainFrame/Desktop/",
         title="Choose logg file 2",
         filetypes=(("Log Files", "*.log"),))
 
-    logPath2.insert(END, tf2)  # Writes path address to text box in GUI
+    logPath2.insert(END, logFile2)  # Writes path address to text box in GUI
 
     # Opens and parses the data from log file
-    with open(tf2, 'r') as fin:
-        for line in fin:
+    with open(logFile2, 'r') as fileInput:
+        for line in fileInput:
             position = line.find('=')
             parameters_dict2[line[:position]] = (line[position + 1:]).strip()
 
 
 def compareLogFiles():
-   """Compares the 'Essential' parameters of the log files"""
+    """Compares the 'Essential' parameters of the log files"""
     textArea.delete("1.0", END)
     
     # Determines the number of different parameters
     differencesCounter = 0
-    for k1, v1 in parameters_dict1.items():
-        for k2, v2 in parameters_dict2.items():
-            if k1 == k2:
-                if v1 != v2:
-                    differences_list.append(k1)
+    for key1, value1 in parameters_dict1.items():
+        for key2, value2 in parameters_dict2.items():
+            if key1 == key2:
+                if value1 != value2:
+                    differences_list.append(key1)
                     differencesCounter += 1
 
     # Prints a summary in the text box.
@@ -105,19 +105,19 @@ def compareLogFiles():
   
     # Detailed output of similarities and differences.
     textArea.insert(INSERT, "\n\n" + "=" * 97)
-    for k1, v1 in parameters_dict1.items():
-        for k2, v2 in parameters_dict2.items():
-            if k1 == k2:
-                if v1 != v2:
-                    k1_count = 48 - len(k1.strip())  # Text formatting
-                    v1_count = 41 - len(v1.strip())  # Text formatting
-                    v2_count = 41 - len(v2.strip())  # Text formatting
-                    textArea.insert(END, "\n" + k1 + " " * k1_count + "|\nLog 1: " + v1 + " " * v1_count + "|\nLog 2: "
-                                    + v2 + " " * v2_count + "|\n" + '-' * 97)
+    for key1, value1 in parameters_dict1.items():
+        for key2, value2 in parameters_dict2.items():
+            if key1 == key2:
+                if value1 != value2:
+                    k1_count = 48 - len(key1.strip())  # Text formatting
+                    v1_count = 41 - len(value1.strip())  # Text formatting
+                    v2_count = 41 - len(value2.strip())  # Text formatting
+                    textArea.insert(END, "\n" + key1 + " " * k1_count + "|\nLog 1: " + value1 + " " * v1_count + "|\nLog 2: "
+                                    + value2 + " " * v2_count + "|\n" + '-' * 97)
 
                 else:
-                    textArea.insert(END, "\n\t\t\t\t\t\t| " + k1 + "\n\t\t\t\t\t\t| Log 1: " + v1 +
-                                    "\n\t\t\t\t\t\t| Log 2: " + v2 + "\n" + "-" * 97)
+                    textArea.insert(END, "\n\t\t\t\t\t\t| " + key1 + "\n\t\t\t\t\t\t| Log 1: " + value1 +
+                                    "\n\t\t\t\t\t\t| Log 2: " + value2 + "\n" + "-" * 97)
 
 
 def compareEssentialLogFiles():
@@ -126,12 +126,12 @@ def compareEssentialLogFiles():
     
     # Determines number of differences between parameters
     differencesCounter = 0
-    for k1, v1 in parameters_dict1.items():
-        for k2, v2 in parameters_dict2.items():
-            if k1 in parameters_list:
-                if k1 == k2:
-                    if v1 != v2:
-                        differences_list.append(k1)
+    for key1, value1 in parameters_dict1.items():
+        for key2, value2 in parameters_dict2.items():
+            if key1 in parameters_list:
+                if key1 == key2:
+                    if value1 != value2:
+                        differences_list.append(key1)
                         differencesCounter += 1
 
     # Prints a summary in the text box.
@@ -142,21 +142,21 @@ def compareEssentialLogFiles():
 
     # Detailed output of similarities and differences.
     textArea.insert(INSERT, '\n\n' + "=" * 97)
-    for k1, v1 in parameters_dict1.items():
-        for k2, v2 in parameters_dict2.items():
-            if k1 in parameters_list:
-                if k1 == k2:
-                    if v1 != v2:
-                        k1_count = 48 - len(k1.strip())
-                        v1_count = 41 - len(v1.strip())
-                        v2_count = 41 - len(v2.strip())
+    for key1, value1 in parameters_dict1.items():
+        for key2, value2 in parameters_dict2.items():
+            if key1 in parameters_list:
+                if key1 == key2:
+                    if value1 != value2:
+                        k1_count = 48 - len(key1.strip())
+                        v1_count = 41 - len(value1.strip())
+                        v2_count = 41 - len(value2.strip())
                         textArea.insert(END,
-                                        "\n" + k1 + " " * k1_count + "|\nLog 1: " + v1 + " " * v1_count + "|\nLog 2: "
-                                        + v2 + " " * v2_count + "|\n" + '-' * 97)
+                                        "\n" + key1 + " " * k1_count + "|\nLog 1: " + value1 + " " * v1_count + "|\nLog 2: "
+                                        + value2 + " " * v2_count + "|\n" + '-' * 97)
 
                     else:
-                        textArea.insert(END, "\n\t\t\t\t\t\t| " + k1 + "\n\t\t\t\t\t\t| Log 1: " + v1 +
-                                        "\n\t\t\t\t\t\t| Log 2: " + v2 + "\n" + "-" * 97)
+                        textArea.insert(END, "\n\t\t\t\t\t\t| " + key1 + "\n\t\t\t\t\t\t| Log 1: " + value1 +
+                                        "\n\t\t\t\t\t\t| Log 2: " + value2 + "\n" + "-" * 97)
 
 
 def clearAllFields():
@@ -181,11 +181,11 @@ def summaryDifference(differencesCounter):
     textArea.insert(END, '========================')
 
 def aboutInformation():
-  """ Displays message box with program information """
+    """ Displays message box with program information """
     messagebox.showinfo('about', message=informationAbout)
 
 def useInformation():
-  """ Displays message box with program use information """
+    """ Displays message box with program use information """
     messagebox.showinfo('useGuide', message=informationUseGuide)
 
 
